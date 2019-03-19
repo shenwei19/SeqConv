@@ -2,7 +2,7 @@
 # Sequence Convolution
 
 ###### The goal is to predict the binding intensity of a specific transcription factor only based on DNA sequence information of the binding region by means of convolutional neural network. Below is an overview of the strcture. Simplified version provided by Shen Wei.
-![](model_SeqConv.png)
+![](https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/model_SeqConv.png?token=Auc1u-PBNkmUWA2PGYhgUhvTbWQIXDWXks5ckIc4wA%3D%3D)
 
  ***
 ##### Here, we provide a file named 'total.f.n.t.txt' recording 30392 binding intensities after max-min scaling followed by 201-bp DNA sequences. Below is an example:
@@ -148,7 +148,7 @@
     plt.yticks([0.5,1])
     plt.show()
 
-![](Figure_1.png)
+![](https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure_1.png?token=Auc1u5cXAQG9vSvD8e20i23-mDfOb9Fzks5ckIbqwA%3D%3D)
 
     plot_model(model,to_file='model_SeqConv.png',show_shapes=True)
     model.save('SeqConv_model.h5')
