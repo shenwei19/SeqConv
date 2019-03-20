@@ -1,5 +1,4 @@
 # SeqConv
-# Sequence Convolution
 
 ###### The goal is to predict the binding intensity of a specific transcription factor only based on DNA sequence information of the binding region by means of convolutional neural network. Below is an overview of the structure. Simplified version provided by Shen Wei.
 ![](https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/model_SeqConv.png?token=Auc1u-PBNkmUWA2PGYhgUhvTbWQIXDWXks5ckIc4wA%3D%3D)
