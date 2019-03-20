@@ -5,7 +5,7 @@
 ![](https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/model_SeqConv.png?token=Auc1u-PBNkmUWA2PGYhgUhvTbWQIXDWXks5ckIc4wA%3D%3D)
 
  ***
-##### Here, we provide a file named 'total.f.n.t.txt' recording 30392 binding intensities after max-min scaling followed by 201-bp DNA sequences. Below is an example:
+##### Here, we provide a file named 'peak.f.n.t.txt' recording 30392 binding intensities after max-min scaling followed by 201-bp DNA sequences. Below is an example:
 
     
     0.999079792677  TTCCGGTGGAATGGTTTGGTAAGGTTTCCTAAAAGCTTATGGAATCTAAAAGCTCTGCAAACAATATAAATATCAATTAGTGATACTTTTACACTGAGAATCTGATCCGACCGTTACAGTTACGCATATATATTATACACTGAATATTTTATTATAATTCATGTTACTTTTCTTTTGTTATATGTTTGATTTTTTCTTGTT
@@ -56,7 +56,7 @@
 		    Tag=np.append(Tag,float(tag))
 	    return np.array(Mat),Tag
 
-    Mat,Tag = mat2Mat('total.f.n.t.txt')
+    Mat,Tag = mat2Mat('peak.f.n.t.txt')
     
     from keras.utils import np_utils
     from collections import Counter
