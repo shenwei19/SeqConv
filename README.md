@@ -4,7 +4,7 @@
 
 ##### The goal of this model is to predict the binding probability of a specific transcription factor based only on DNA sequence information of the binding region by means of convolutional neural network. Below is an overview of the strcture. 
 
-<img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure1.png" width="600" height="400" align=center />
+<img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure1.png" width="800" height="400" align=center />
 
 ***
 ##### Prerequisites
