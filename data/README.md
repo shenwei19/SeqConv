@@ -1,1 +1,1 @@
-Please download TAIR10.fa yourself :)
+Please download zm.fa yourself :)
