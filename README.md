@@ -1,10 +1,10 @@
 ![](https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/logo.png)
-## SeqConv
+# SeqConv
 ***
 
 ##### The goal of this model is to predict the binding probability of a specific transcription factor based only on DNA sequence information of the binding region by means of convolutional neural network. Below is an overview of the strcture. 
 
-<img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure1.png" width="800" height="400" align=center />
+<img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure1.png" width="1000" height="400" align=center />
 
 ***
 ##### Prerequisites
@@ -32,7 +32,7 @@
     Rscript plot_motif.r test_seq.meme test
     
 ##### After training, you will see an image showing the loss error and val_loss error in the training step
-<img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure2.png" height=300 align=center />
+<img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure2.png" width=800 height=300 align=center />
 
 ##### And the motif of this transcription factor
 <img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/test_motif.png" height=300 width=400 align=center />
