@@ -1,4 +1,5 @@
 # SeqConv
+
 ***
 
 ##### The goal of this model is to predict the binding probability of a specific transcription factor based only on DNA sequence information of the binding region by means of convolutional neural network. Below is an overview of the strcture. 
@@ -34,6 +35,5 @@
 <img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/Figure2.png" width=1000 height=400 align=center />
 
 ##### And the motif of this transcription factor
-<img src="https://raw.githubusercontent.com/shenwei19/SeqConv/master/imgs/test_motif.png" height=300 width=400 align=center />
 
 
