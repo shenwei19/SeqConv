@@ -4,7 +4,7 @@ import sys
 
 in_file = sys.argv[1] # *.narrowPeak
 name = in_file.split('/')[1].split('.')[0]
-file = open('/home/shenwei/ref/maize4/maize4.chrmsize').readlines()[:19]
+file = open('maize4.chrmsize').readlines()[:19]
 dic = { line.split()[0]:int(line.split()[1])-200 for line in file}
 
 #print dic
