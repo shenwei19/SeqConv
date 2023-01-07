@@ -7,12 +7,8 @@ name = in_file.split('/')[1].split('.')[0]
 file = open('maize4.chrmsize').readlines()[:19]
 dic = { line.split()[0]:int(line.split()[1])-200 for line in file}
 
-#print dic
-
-#tar_file = open('rand_seq.txt','w')
 
 if int(os.popen('wc -l %s' % in_file).read().split()[0]) > 3000:
-#	recm = int(os.popen('wc -l %s' % in_file).read().split()[0])
 	recm = 20020	
 else:
 	recm = 3000

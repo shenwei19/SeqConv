@@ -1,10 +1,22 @@
-#import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import time
 import os 
 import sys
+from keras.utils import np_utils
+from collections import Counter
+from keras.models import Model
+from keras.layers import Input,Dense,Dropout,Flatten
+from keras.layers import Convolution2D,MaxPooling2D,AveragePooling2D,ReLU
+from keras.layers.normalization import BatchNormalization
+from keras.layers.advanced_activations import LeakyReLU
+from keras.utils import plot_model
+from keras.callbacks import EarlyStopping
+from keras.layers import concatenate
+from keras.initializers import random_normal
+from keras import regularizers
+from sklearn.metrics import roc_curve, auc, average_precision_score
 
 np.random.seed(12580)
 
@@ -44,16 +56,8 @@ def mat2Mat(filename):
 	return np.array(Mat),Tag
 
 Mat,Tag = mat2Mat('train/'+in_file)
-#Tag = Tag - 0.5
-
-#Mat_1 = Mat[:,0,:,:]
-#Mat_2 = Mat[:,1,:,:]
-from keras.utils import np_utils
-from collections import Counter
 
 x_train,x_test,y_train,y_test=train_test_split(Mat,Tag,test_size=0.1,random_state=12580)
-#print y_train
-#print y_test
 
 x_train_1 = x_train[:,0,:,:]
 x_train_1 = x_train_1.reshape(x_train_1.shape[0],4,201,1)
@@ -65,27 +69,10 @@ x_test_1 = x_test_1.reshape(x_test_1.shape[0],4,201,1)
 x_test_2 = x_test[:,1,:,:]
 x_test_2 = x_test_2.reshape(x_test_2.shape[0],4,201,1)
 
-#y_train = np_utils.to_categorical(y_train,num_classes=len(Counter(Tag)))
-#y_test = np_utils.to_categorical(y_test,num_classes=len(Counter(Tag)))
-
-#print x_train_1.shape,x_train_2.shape,x_test_1.shape,x_test_2.shape,y_train.shape,y_test.shape
-
-from keras.models import Model
-from keras.layers import Input,Dense,Dropout,Flatten
-from keras.layers import Convolution2D,MaxPooling2D,AveragePooling2D,ReLU
-from keras.layers.normalization import BatchNormalization
-from keras.layers.advanced_activations import LeakyReLU
-from keras.utils import plot_model
-from keras.callbacks import EarlyStopping
-from keras.layers import concatenate
-from keras.initializers import random_normal
-from keras import regularizers
-
 mat_1 = Input(shape=(4,201,1))
 mat_2 = Input(shape=(4,201,1))
 
 shared_conv = Convolution2D(filters=16,kernel_size=(4,24),padding='valid') #no need to claim input_shape?
-#shared_conv_2 = Convolution2D(filters=16,kernel_size=(4,24),padding='valid')
 
 x1 = shared_conv(mat_1)
 x2 = shared_conv(mat_2)
@@ -100,22 +87,13 @@ x2_1 = MaxPooling2D(pool_size=(1,178))(x2)
 x2_2 = AveragePooling2D(pool_size=(1,178))(x2)
 
 merged_vector = concatenate([x1_1,x1_2,x2_1,x2_2])
-#merged_vector = concatenate([x1_1,x1_2])
 
 x = Flatten()(merged_vector)
 x = BatchNormalization()(x)
 x = Dense(64,activation='relu',kernel_initializer=random_normal(mean=0,stddev=1),bias_initializer=random_normal(mean=0,stddev=1))(x)
-#x = Dropout(0.5)(x)
-#x = Dense(128,activation='relu',kernel_initializer=random_normal(mean=0,stddev=1),bias_initializer=random_normal(mean=0,stddev=1))(x)
-#x = Dropout(0.5)(x)
 main_output = Dense(1,activation='sigmoid',kernel_initializer=random_normal(mean=0,stddev=1),bias_initializer=random_normal(mean=0,stddev=1))(x)
 
-#from keras import backend as K
-#def mse_l2(y_true,y_pred):
-#	return K.mean(K.square(y_pred - y_true + 0.0001 * (K.square(y_pred - y_true))),axis=-1)
-
 model = Model(inputs=[mat_1,mat_2],outputs=main_output)
-#model = Model(inputs=mat_1,outputs=main_output)
 model.compile(loss='mse',optimizer='sgd')
 early_stopping = EarlyStopping(monitor='val_loss',patience=100)
 
@@ -126,31 +104,11 @@ history = model.fit([x_train_1,x_train_2],y_train,batch_size=32,epochs=1000,vali
 end = time.time()
 dur = end - start
 os.system('echo %s %s >> time_rec.txt' % (name,dur))
-#history = model.fit(x_train_1,y_train,batch_size=64,epochs=200,validation_data=[x_test_1,y_test],callbacks=[early_stopping])
 
-
-#score = model.evaluate([x_test_1,x_test_2],y_test)
-#prob = model.predict([x_test_1,x_test_2])
-#print 'Test score:',score[0]
-#print 'Test accuracy',score[1]
-
-#print history.history
-#print model.summary()
-#from sklearn.metrics import roc_curve, auc
-#fpr, tpr, threshold = roc_curve(y_test,prob)
-#roc_auc = auc(fpr,tpr)
 loss = history.history['loss']
 val_loss = history.history['val_loss']
-#acc = history.history['acc']
-#val_acc = history.history['val_acc']
-
 
 plt.figure()
-#plt.title('main')
-#plt.subplot(2,1,1)
-#plt.plot(fpr,tpr,label='area = %s' % roc_auc)
-#plt.scatter(y_train,model.predict([x_train_1,x_train_2]))
-#plt.title('ROC')
 plt.subplots_adjust(wspace=0.5,hspace=0.5)
 plt.subplot(1,2,1)
 plt.plot(range(1,len(loss)+1),loss,color='red')
@@ -168,7 +126,6 @@ for i,j in zip(loss,val_loss):
 loss_file.close()
 
 prob = model.predict([x_test_1,x_test_2])
-from sklearn.metrics import roc_curve, auc, average_precision_score
 fpr, tpr, threshold = roc_curve(y_test,prob)
 roc_auc = auc(fpr,tpr)
 prc = average_precision_score(y_test,prob)
@@ -185,22 +142,4 @@ plt.plot(fpr,tpr,label='area = %s' % roc_auc)
 plt.title('ROC')
 plt.savefig("roc/%s_roc.png" % name)
 
-#plt.subplot(2,2,3)
-#plt.plot(range(1,len(acc)+1),acc,color='yellow')
-#plt.title('acc',fontsize=10)
-
-#plt.subplot(2,2,4)
-#plt.plot(range(1,len(val_acc)+1),val_acc,color='brown')
-#plt.title('val_acc',fontsize=10)
-#plt.yticks([0.5,1])
-#plt.savefig("loss/%s_loss.png" % name)
-#plt.show()
-
-#plot_model(model,to_file='model_SeqConv.pdf',show_shapes=True)
 model.save('model/%s_model.h5' % name)
-
-#plt.figure()
-#plt.scatter(model.predict([x_test_1[:200],x_test_2[:200]]),y_test[:200])
-#plt.scatter(model.predict(x_test_1[:200]),y_test[:200])
-#plt.savefig("%s_validate.png" % name)
-

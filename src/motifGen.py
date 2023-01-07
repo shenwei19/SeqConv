@@ -44,46 +44,20 @@ def mat2Mat(filename):
 
 os.system('head -n 500 train/%s_train.txt > tmp.txt' % name)
 Mat,Tag,Seq = mat2Mat('tmp.txt')
-#Tag = Tag - 0.5
 
-#Mat_1 = Mat[:,0,:,:]
-#Mat_2 = Mat[:,1,:,:]
 from keras.utils import np_utils
 from collections import Counter
-
-#x_train,x_test, y_train,y_test, seq_train,seq_test=train_test_split(Mat,Tag,Seq,test_size=1,random_state=12580)
-#print seq_test
-#print y_train
-#print y_test
-
-#x_train_1 = x_train[:,0,:,:]
-#x_train_1 = x_train_1.reshape(x_train_1.shape[0],4,201,1)
-#x_train_2 = x_train[:,1,:,:]
-#x_train_2 = x_train_2.reshape(x_train_2.shape[0],4,201,1)
 
 x_test_1 = Mat[:,0,:,:]
 x_test_1 = x_test_1.reshape(x_test_1.shape[0],4,201,1)
 x_test_2 = Mat[:,1,:,:]
 x_test_2 = x_test_2.reshape(x_test_2.shape[0],4,201,1)
 
-#y_train = np_utils.to_categorical(y_train,num_classes=len(Counter(Tag)))
-#y_test = np_utils.to_categorical(y_test,num_classes=len(Counter(Tag)))
-
 
 from keras.models import Model
 from keras.models import load_model
 from tqdm import tqdm
 model_2 = load_model('model/%s_model.h5' % name)
-
-#for layer in model_2.layers:
-#	print layer.name
-
-#from keras.models import Input
-
-#x1 = Input(shape=(4,201,1))
-#x2 = Input(shape=(4,201,1))
-
-#can not use model_3 = Model(inputs=model_2.input,outputs=model_2.get_layer('conv2d_1').output), or report 'AttributeError: Layer conv2d_1 has multiple inbound nodes, hence the notion of "layer output" is ill-defined. Use `get_output_at(node_index)` instead' in case of various output shape even if we know the output shapes are identical
 
 model_3 = Model(inputs=model_2.input,outputs=[model_2.get_layer('re_lu_1').get_output_at(0),model_2.get_layer('re_lu_2').get_output_at(0)]) # output a list with 2 elements 
 
@@ -113,9 +87,7 @@ for i in tqdm(range(len(x_test_1))):
 			l0_max = max(l0[:,j])
 			l1_index = np.where(l1[:,j]==max(l1[:,j]))[0][0]
 			l1_max = max(l1[:,j])
-#			dict['+_'+str(l0_index)] = l0_max
-#			dict['-_'+str(l1_index)] = l1_max
-	#		print l0_index, l0_max, l1_index, l1_max
+
 			if not '+_'+str(l0_index) in dic.keys():
 				dic['+_'+str(l0_index)] = l0_max
 			else:
@@ -132,8 +104,7 @@ for i in tqdm(range(len(x_test_1))):
 	                        else:
 	                                dic['-_'+str(l1_index)] = l1_max
 		strand,seq_index = max(dic,key=dic.get).split('_') #this is the method to find max_num in a dict
-	#	print type(seq_index) numpy.int64
-	#	print seq_test[i]
+
 		if strand == '+':
 			seq_24 = Seq[i][int(seq_index):int(seq_index)+24]
 		if strand == '-':	
@@ -147,17 +118,16 @@ with open('seq.txt','w') as tar_file:
 os.system('rm tmp.txt')
 
 from collections import Counter
-#import tqdm
+
 file=open('seq.txt').readlines()
 tar_file=open('motif/%s_seq.meme' % name,'w')
-#tar_file.write('MEME version 4.4 \nALPHABET= ACGT \nstrands: + - \nBackground letter frequencies (from uniform background): \nA 0.25000 C 0.25000 G 0.25000 T 0.25000 \nMOTIF 0\nletter-probability matrix: alength= 4 w= 8 nsites= 445 E= 2.2e-019\n')
 
 length=24
 for i in range(length):
         list=[]
         for j in file:
                 list.append(j[i])
-#	print len(list)
+
         c = dict(Counter(list))
         sum_all = float(sum(c.values()))
         if 'A' in c.keys():
